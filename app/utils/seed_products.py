@@ -183,9 +183,15 @@ def seed_products():
                     original_price = None
                     sale_price = round(base_price, 2)
                 
-                # Create AliExpress search URL
-                search_term = urllib.parse.quote(full_title_he)
-                affiliate_url = f"https://www.aliexpress.com/w/wholesale-{search_term}.html?sortType=bestmatch"
+                # Create AliExpress search URL (using English search term for better results)
+                search_term_en = urllib.parse.quote(full_title_en.replace(' ', '-'))
+                search_term_he = urllib.parse.quote(full_title_he)
+                
+                # Primary affiliate link - search URL
+                affiliate_url = f"https://www.aliexpress.com/w/wholesale-{search_term_en}.html?sortType=bestmatch"
+                
+                # Fallback direct search URL
+                product_url = f"https://www.aliexpress.com/wholesale?SearchText={search_term_he}"
                 
                 # Create styled image (use English for image - Hebrew doesn't render well)
                 bg, text = CATEGORY_COLORS.get(category, ('1a1a2e', 'e94560'))
@@ -203,7 +209,7 @@ def seed_products():
                     currency='USD',
                     category=category,
                     image_url=image_url,
-                    product_url=f"https://www.aliexpress.com/wholesale?SearchText={search_term}",
+                    product_url=product_url,
                     affiliate_url=affiliate_url,
                     rating=round(random.uniform(4.0, 5.0), 1),
                     reviews_count=random.randint(10, 2000),

@@ -268,10 +268,125 @@ def wishlist():
     return render_template('wishlist.html')
 
 
-@main.route('/login')
+@main.route('/login', methods=['GET', 'POST'])
 def login():
-    """Login page."""
+    """Login page with authentication."""
+    from flask_login import login_user, current_user
+    from app.models.user import User
+    
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        remember = bool(request.form.get('remember'))
+        
+        user = User.query.filter_by(email=email).first()
+        
+        if user and user.check_password(password):
+            if not user.is_active:
+                return render_template('login.html', error='החשבון שלך מושהה')
+            
+            login_user(user, remember=remember)
+            user.last_login = datetime.utcnow()
+            db.session.commit()
+            
+            next_page = request.args.get('next')
+            if next_page:
+                return redirect(next_page)
+            return redirect(url_for('main.index'))
+        else:
+            return render_template('login.html', error='אימייל או סיסמה שגויים')
+    
     return render_template('login.html')
+
+
+@main.route('/register', methods=['GET', 'POST'])
+def register():
+    """User registration page."""
+    from flask_login import current_user
+    from app.models.user import User
+    
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+    
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        password_confirm = request.form.get('password_confirm')
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        
+        # Validation
+        if not email or not password:
+            return render_template('register.html', error='אנא מלא את כל השדות הנדרשים')
+        
+        if password != password_confirm:
+            return render_template('register.html', error='הסיסמאות אינן תואמות')
+        
+        if len(password) < 6:
+            return render_template('register.html', error='הסיסמה חייבת להכיל לפחות 6 תווים')
+        
+        # Check if email exists
+        if User.query.filter_by(email=email).first():
+            return render_template('register.html', error='כתובת האימייל כבר רשומה במערכת')
+        
+        # Create new user
+        user = User(
+            email=email,
+            first_name=first_name,
+            last_name=last_name
+        )
+        user.set_password(password)
+        
+        db.session.add(user)
+        db.session.commit()
+        
+        return redirect(url_for('main.login'))
+    
+    return render_template('register.html')
+
+
+@main.route('/logout')
+def logout():
+    """Logout user."""
+    from flask_login import logout_user
+    logout_user()
+    return redirect(url_for('main.index'))
+
+
+@main.route('/profile')
+def profile():
+    """User profile page."""
+    from flask_login import login_required, current_user
+    from app.models.user import Order
+    login_required()
+    
+    # Get user's orders
+    orders = Order.query.filter_by(user_id=current_user.id).order_by(Order.created_at.desc()).limit(10).all()
+    
+    return render_template('profile.html', user=current_user, orders=orders)
+
+
+@main.route('/profile/edit', methods=['GET', 'POST'])
+def edit_profile():
+    """Edit user profile."""
+    from flask_login import login_required, current_user
+    login_required()
+    
+    if request.method == 'POST':
+        current_user.first_name = request.form.get('first_name')
+        current_user.last_name = request.form.get('last_name')
+        current_user.phone = request.form.get('phone')
+        current_user.address = request.form.get('address')
+        current_user.city = request.form.get('city')
+        current_user.postal_code = request.form.get('postal_code')
+        
+        db.session.commit()
+        return redirect(url_for('main.profile'))
+    
+    return render_template('edit_profile.html', user=current_user)
 
 
 def get_category_icon(key):
