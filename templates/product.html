@@ -170,6 +170,260 @@
         </div>
     </div>
     {% endif %}
+    
+    <!-- Rich Content Sections for AdSense -->
+    <div class="row mt-5">
+        <div class="col-lg-8">
+            <!-- Product Description -->
+            <div class="content-section">
+                <h3><i class="bi bi-file-text"></i> תיאור מפורט</h3>
+                <div class="content-body">
+                    {% if product.description_hebrew %}
+                    <p>{{ product.description_hebrew }}</p>
+                    {% else %}
+                    <p>{{ product.title_hebrew or product.title }} הוא מוצר איכותי ומקצועי המושלם לשימוש יומיומי. המוצר עמיד לאורך זמן ומציע תמורה מעולה למחיר.</p>
+                    {% endif %}
+                    <p>מוצר זה נבחר בקפידה עבור הציבור החרדי, עם דגש על צניעות ואיכות. כל המוצרים באתר שלנו עוברים סינון קפדני כדי להבטיח התאמה לערכים של הקהילה הדתית.</p>
+                </div>
+            </div>
+            
+            <!-- AdSense Ad Unit 1 -->
+            <div class="adsense-unit">
+                <small class="text-muted">פרסומת</small>
+                <!-- AdSense code will go here -->
+                <div class="ad-placeholder">Advertisement</div>
+            </div>
+            
+            <!-- Pros and Cons -->
+            <div class="content-section">
+                <h3><i class="bi bi-check-circle"></i> יתרונות וחסרונות</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="pros-box">
+                            <h4><i class="bi bi-plus-circle-fill text-success"></i> יתרונות</h4>
+                            <ul class="feature-list">
+                                <li><i class="bi bi-check-lg text-success"></i> מחיר משתלם לעומת השוק המקומי</li>
+                                <li><i class="bi bi-check-lg text-success"></i> איכות גבוהה ועמידות לאורך זמן</li>
+                                <li><i class="bi bi-check-lg text-success"></i> מוצר צנוע ומתאים לבית דתי</li>
+                                <li><i class="bi bi-check-lg text-success"></i> משלוח ישיר עד הבית</li>
+                                <li><i class="bi bi-check-lg text-success"></i> דירוג גבוה מלקוחות מרוצים</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="cons-box">
+                            <h4><i class="bi bi-dash-circle-fill text-warning"></i> חסרונות</h4>
+                            <ul class="feature-list">
+                                <li><i class="bi bi-exclamation-triangle text-warning"></i> זמן משלוח ארוך יותר ממוצר מקומי</li>
+                                <li><i class="bi bi-exclamation-triangle text-warning"></i> לא ניתן לראות את המוצר לפני הקנייה</li>
+                                <li><i class="bi bi-exclamation-triangle text-warning"></i> תמיכה טכנית באנגלית</li>
+                                <li><i class="bi bi-exclamation-triangle text-warning"></i> צריך לבדוק תאימות למתח ישראלי</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Why Buy / Why Not -->
+            <div class="content-section">
+                <h3><i class="bi bi-question-circle"></i> האם כדאי לקנות?</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="why-buy">
+                            <h4><i class="bi bi-hand-thumbs-up-fill text-primary"></i> למה כן?</h4>
+                            <ul class="reason-list">
+                                <li>חיסכון משמעותי של עד 50% לעומת מחירים בארץ</li>
+                                <li>גיוון רחב של אפשרויות וצבעים</li>
+                                <li>אפשרות להחזרה בתוך 30 יום</li>
+                                <li>משלוח חינם על הזמנות מעל סכום מינימלי</li>
+                                <li>מוצרים ייחודיים שלא נמצאים בישראל</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="why-not">
+                            <h4><i class="bi bi-hand-thumbs-down-fill text-secondary"></i> מתי לא?</h4>
+                            <ul class="reason-list">
+                                <li>אם צריך את המוצר דחוף (פחות משבוע)</li>
+                                <li>אם המוצר דורש התקנה מקצועית מורכבת</li>
+                                <li>אם צריך שירות אחריות מקומי</li>
+                                <li>אם המוצר עדין ושביר מאוד</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AdSense Ad Unit 2 -->
+            <div class="adsense-unit">
+                <small class="text-muted">פרסומת</small>
+                <div class="ad-placeholder">Advertisement</div>
+            </div>
+            
+            <!-- Price Comparison -->
+            <div class="content-section">
+                <h3><i class="bi bi-currency-dollar"></i> השוואת מחירים - ישראל מול AliExpress</h3>
+                <div class="price-comparison">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>מקור</th>
+                                <th>מחיר משוער</th>
+                                <th>הפרש</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="aliexpress-row">
+                                <td><strong>AliExpress</strong> <span class="badge bg-success">מומלץ</span></td>
+                                <td><strong>${{ "%.2f"|format(product.price) }}</strong></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>חנויות מקוונות בישראל</td>
+                                <td>${{ "%.2f"|format(product.price * 1.8) }}</td>
+                                <td><span class="text-success">חיסכון של {{ "%.0f"|format(((product.price * 1.8 - product.price) / (product.price * 1.8)) * 100) }}%</span></td>
+                            </tr>
+                            <tr>
+                                <td>חנויות פיזיות בישראל</td>
+                                <td>${{ "%.2f"|format(product.price * 2.5) }}</td>
+                                <td><span class="text-success">חיסכון של {{ "%.0f"|format(((product.price * 2.5 - product.price) / (product.price * 2.5)) * 100) }}%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="price-note"><i class="bi bi-info-circle"></i> המחירים בארץ הם הערכה בלבד ויכולים להשתנות בין חנויות שונות. המחיר ב-AliExpress כולל משלוח בינלאומי.</p>
+                </div>
+            </div>
+            
+            <!-- FAQ Section -->
+            <div class="content-section">
+                <h3><i class="bi bi-chat-square-text"></i> שאלות נפוצות</h3>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <h5 class="faq-question"><i class="bi bi-question-lg"></i> האם המוצר צנוע ומתאים לבית דתי?</h5>
+                        <p class="faq-answer">כן! כל המוצרים באתר שלנו עוברים סינון קפדני. אין תמונות נשים, אין בגדי נשים, ואין מוצרים שאינם מתאימים לציבור החרדי.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h5 class="faq-question"><i class="bi bi-question-lg"></i> כמה זמן לוקח המשלוח?</h5>
+                        <p class="faq-answer">זמן המשלוח נע בין 10-30 ימים בדרך כלל, תלוי בחנות ובאזור המגורים. אפשר גם לבחור משלוח מהיר בתשלום נוסף.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h5 class="faq-question"><i class="bi bi-question-lg"></i> מה אם המוצר לא מתאים או פגום?</h5>
+                        <p class="faq-answer">AliExpress מציעה הגנת קונה. אם המוצר לא הגיע או לא כמתואר, אפשר לפתוח מחלוקת ולקבל החזר מלא.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h5 class="faq-question"><i class="bi bi-question-lg"></i> האם יש אחריות על המוצר?</h5>
+                        <p class="faq-answer">רוב המוכרים ב-AliExpress מציעים אחריות של 12 חודשים. חשוב לבדוק את תנאי האחריות בדף המוצר לפני הרכישה.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AdSense Ad Unit 3 -->
+            <div class="adsense-unit">
+                <small class="text-muted">פרסומת</small>
+                <div class="ad-placeholder">Advertisement</div>
+            </div>
+            
+            <!-- Religious Appropriateness -->
+            <div class="content-section religious-section">
+                <h3><i class="bi bi-check2-circle"></i> התאמה לציבור הדתי</h3>
+                <div class="religious-content">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="religious-badge">
+                                <i class="bi bi-shield-check"></i>
+                                <h5>צנוע</h5>
+                                <p>ללא תמונות נשים או תכנים לא צנועים</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="religious-badge">
+                                <i class="bi bi-award"></i>
+                                <h5>איכותי</h5>
+                                <p>נבחר מבין אלפי מוצרים באיכות גבוהה</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="religious-badge">
+                                <i class="bi bi-patch-check"></i>
+                                <h5>מאושר</h5>
+                                <p>מתאים לשימוש בבית חרדי</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Buying Guide -->
+            <div class="content-section">
+                <h3><i class="bi bi-book"></i> מדריך קנייה חכמה ב-AliExpress</h3>
+                <div class="guide-content">
+                    <div class="guide-step">
+                        <span class="step-number">1</span>
+                        <h5>בדוק את דירוג המוכר</h5>
+                        <p>תמיד בחר מוכרים עם דירוג של 95% ומעלה. מוכרים עם דירוג גבוה מספקים שירות טוב יותר ומוצרים איכותיים.</p>
+                    </div>
+                    <div class="guide-step">
+                        <span class="step-number">2</span>
+                        <h5>קרא ביקורות</h5>
+                        <p>תשתמש בביקורות עם תמונות - הן הכי אמינות. תשים לב לביקורות שמדברות על איכות ועמידות.</p>
+                    </div>
+                    <div class="guide-step">
+                        <span class="step-number">3</span>
+                        <h5>בדוק תאימות</h5>
+                        <p>אלקטרוניקה - בדוק שמתאים ל-220V. בגדים - בדוק את טבלת המידות האסייתית שונה.</p>
+                    </div>
+                    <div class="guide-step">
+                        <span class="step-number">4</span>
+                        <h5>השווה מחירים</h5>
+                        <p>אל תקנה מהאופציה הראשונה. חפש את אותו מוצר ממוכרים שונים והשווה מחירים ודירוגים.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Info Box -->
+            <div class="sidebar-box">
+                <h4>מידע מהיר</h4>
+                <ul class="quick-info">
+                    <li><i class="bi bi-truck"></i> משלוח: 10-30 ימים</li>
+                    <li><i class="bi bi-shield-check"></i> הגנת קונה: כן</li>
+                    <li><i class="bi bi-arrow-return-left"></i> החזרה: 30 יום</li>
+                    <li><i class="bi bi-award"></i> אחריות: 12 חודשים</li>
+                    <li><i class="bi bi-globe"></i> מקור: AliExpress</li>
+                </ul>
+            </div>
+            
+            <!-- AdSense Sidebar Unit -->
+            <div class="adsense-unit sidebar-ad">
+                <small class="text-muted">פרסומת</small>
+                <div class="ad-placeholder">Advertisement</div>
+            </div>
+            
+            <!-- Recommended For -->
+            <div class="sidebar-box">
+                <h4>מתאים ל...</h4>
+                <ul class="recommended-list">
+                    <li><i class="bi bi-check2"></i> משפחות דתיות</li>
+                    <li><i class="bi bi-check2"></i> חסכוניים</li>
+                    <li><i class="bi bi-check2"></i> אוהבי איכות</li>
+                    <li><i class="bi bi-check2"></i> מחפשי מבצעים</li>
+                </ul>
+            </div>
+            
+            <!-- Related Categories -->
+            <div class="sidebar-box">
+                <h4>קטגוריות קשורות</h4>
+                <div class="related-categories">
+                    <a href="{{ url_for('main.category', category_key='electronic') }}" class="category-tag">אלקטרוניקה</a>
+                    <a href="{{ url_for('main.category', category_key='home_garden') }}" class="category-tag">בית וגן</a>
+                    <a href="{{ url_for('main.category', category_key='toys') }}" class="category-tag">צעצועים</a>
+                    <a href="{{ url_for('main.category', category_key='tools') }}" class="category-tag">כלי עבודה</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
@@ -550,6 +804,354 @@
 .section-title {
     font-size: 1.3rem;
     font-weight: 700;
+}
+
+/* Content Sections */
+.content-section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.content-section h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #131921;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.content-section h3 i {
+    color: var(--amazon-orange);
+}
+
+.content-body p {
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+/* AdSense Units */
+.adsense-unit {
+    background: #f8f9fa;
+    border: 1px dashed #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.adsense-unit.sidebar-ad {
+    padding: 15px;
+}
+
+.ad-placeholder {
+    background: #e9ecef;
+    padding: 40px 20px;
+    border-radius: 4px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Pros and Cons */
+.pros-box, .cons-box {
+    background: #f8fff8;
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%;
+    border-right: 4px solid #28a745;
+}
+
+.cons-box {
+    background: #fffbf8;
+    border-right-color: #ffc107;
+}
+
+.pros-box h4, .cons-box h4 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-list li {
+    padding: 8px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.feature-list li:last-child {
+    border-bottom: none;
+}
+
+/* Why Buy / Why Not */
+.why-buy, .why-not {
+    background: #f8f9ff;
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%;
+}
+
+.why-not {
+    background: #fff8f8;
+}
+
+.why-buy h4, .why-not h4 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.reason-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.reason-list li {
+    padding: 10px 0;
+    padding-right: 25px;
+    position: relative;
+    border-bottom: 1px solid #eee;
+}
+
+.reason-list li:before {
+    content: "•";
+    position: absolute;
+    right: 10px;
+    color: var(--amazon-orange);
+    font-weight: bold;
+}
+
+.reason-list li:last-child {
+    border-bottom: none;
+}
+
+/* Price Comparison */
+.price-comparison {
+    overflow-x: auto;
+}
+
+.price-comparison table {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.aliexpress-row {
+    background: #f0fff0 !important;
+}
+
+.price-note {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+/* FAQ */
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.faq-item {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-right: 3px solid var(--amazon-orange);
+}
+
+.faq-question {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #131921;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.faq-question i {
+    color: var(--amazon-orange);
+}
+
+.faq-answer {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 0;
+    padding-right: 28px;
+}
+
+/* Religious Section */
+.religious-section {
+    background: linear-gradient(135deg, #f8fff8 0%, #f0f8ff 100%);
+}
+
+.religious-badge {
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    height: 100%;
+}
+
+.religious-badge i {
+    font-size: 2.5rem;
+    color: var(--success-green);
+    margin-bottom: 10px;
+}
+
+.religious-badge h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.religious-badge p {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0;
+}
+
+/* Buying Guide */
+.guide-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.guide-step {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.step-number {
+    width: 35px;
+    height: 35px;
+    background: var(--amazon-orange);
+    color: #131921;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.guide-step h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.guide-step p {
+    color: #666;
+    margin-bottom: 0;
+    font-size: 0.95rem;
+}
+
+/* Sidebar */
+.sidebar-box {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.sidebar-box h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #131921;
+}
+
+.quick-info, .recommended-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quick-info li, .recommended-list li {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95rem;
+}
+
+.quick-info li:last-child, .recommended-list li:last-child {
+    border-bottom: none;
+}
+
+.quick-info i {
+    color: var(--amazon-blue);
+}
+
+.recommended-list i {
+    color: var(--success-green);
+}
+
+/* Category Tags */
+.related-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.category-tag {
+    background: #f0f0f0;
+    color: #444;
+    padding: 6px 12px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.category-tag:hover {
+    background: var(--amazon-orange);
+    color: #131921;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .content-section {
+        padding: 15px;
+    }
+    
+    .pros-box, .cons-box, .why-buy, .why-not {
+        margin-bottom: 15px;
+    }
+    
+    .guide-step {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 </style>
 {% endblock %}
