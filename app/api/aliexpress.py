@@ -52,7 +52,16 @@ class AliExpressAPI:
         try:
             response = requests.get(self.base_url, params=params, timeout=30)
             response.raise_for_status()
-            return response.json()
+            data = response.json()
+            
+            # Unwrap nested response structure
+            # Response format: {"method_name_response": {"resp_result": {...}}}
+            if len(data) == 1:
+                first_key = list(data.keys())[0]
+                if '_response' in first_key:
+                    data = data[first_key]
+            
+            return data
         except Exception as e:
             print(f"API Error: {e}")
             return {}

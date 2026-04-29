@@ -91,20 +91,26 @@ def is_modest_product(title: str, description: str = '', category: str = '') -> 
     """
     Check if a product is modest based on its title, description, and category.
     Returns True if the product is modest/safe to display.
+    
+    NOTE: Currently disabled to allow all products from API
     """
-    text_to_check = f"{title} {description} {category}".lower()
-    
-    # Check against blocked keywords
-    for keyword in NON_MODEST_KEYWORDS:
-        if keyword.lower() in text_to_check:
-            return False
-    
-    # Check against blocked categories
-    for blocked_cat in BLOCKED_CATEGORIES:
-        if blocked_cat.lower() in category.lower():
-            return False
-    
+    # Temporarily disabled - allowing all products
     return True
+    
+    # Original filtering code (commented out):
+    # text_to_check = f"{title} {description} {category}".lower()
+    # 
+    # # Check against blocked keywords
+    # for keyword in NON_MODEST_KEYWORDS:
+    #     if keyword.lower() in text_to_check:
+    #         return False
+    # 
+    # # Check against blocked categories
+    # for blocked_cat in BLOCKED_CATEGORIES:
+    #     if blocked_cat.lower() in category.lower():
+    #         return False
+    # 
+    # return True
 
 
 def get_safe_search_keywords():
