@@ -20,7 +20,7 @@
                     </div>
                     {% endif %}
                     
-                    <form method="POST" action="{{ url_for('main.register') }}">
+                    <form method="POST" action="{{ url_for('auth.register') }}">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="first_name" class="form-label">שם פרטי</label>
@@ -60,7 +60,7 @@
                     </form>
                     
                     <div class="text-center">
-                        <p>כבר יש לך חשבון? <a href="{{ url_for('main.login') }}">התחבר כאן</a></p>
+                        <p>כבר יש לך חשבון? <a href="{{ url_for('auth.login') }}">התחבר כאן</a></p>
                     </div>
                 </div>
             </div>

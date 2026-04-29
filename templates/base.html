@@ -460,16 +460,16 @@
                         <span>{{ current_user.first_name or 'החשבון שלי' }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="{{ url_for('main.profile') }}"><i class="bi bi-person"></i> הפרופיל שלי</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}"><i class="bi bi-person"></i> הפרופיל שלי</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('main.wishlist') }}"><i class="bi bi-heart"></i> המועדפים שלי</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('main.cart') }}"><i class="bi bi-cart"></i> העגלה שלי</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="{{ url_for('main.logout') }}"><i class="bi bi-box-arrow-right"></i> התנתק</a></li>
+                        <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-right"></i> התנתק</a></li>
                     </ul>
                 </div>
                 {% else %}
                 <!-- Guest user -->
-                <a href="{{ url_for('main.login') }}" class="header-action">
+                <a href="{{ url_for('auth.login') }}" class="header-action">
                     <i class="bi bi-person-circle"></i>
                     <span>התחבר</span>
                 </a>

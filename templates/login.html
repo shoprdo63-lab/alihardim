@@ -14,7 +14,7 @@
                         <p class="text-muted">התחבר כדי לשמור מועדפים ולנהל את העגלה</p>
                     </div>
                     
-                    <form id="login-form">
+                    <form id="login-form" method="POST" action="{{ url_for('auth.login') }}">
                         <div class="mb-3">
                             <label for="email" class="form-label">אימייל</label>
                             <input type="email" class="form-control" id="email" required placeholder="your@email.com">
@@ -43,9 +43,9 @@
                     
                     <div class="text-center">
                         <p class="text-muted">אין לך חשבון עדיין?</p>
-                        <button class="btn btn-outline-primary" onclick="showRegister()">
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">
                             <i class="bi bi-person-plus"></i> צור חשבון חדש
-                        </button>
+                        </a>
                     </div>
                     
                     <!-- Social Login -->

@@ -7,3 +7,5 @@ requests==2.31.0
 Pillow==10.0.0
 lxml==4.9.3
 beautifulsoup4==4.12.2
+supabase==2.3.1
+postgrest-py==0.16.3

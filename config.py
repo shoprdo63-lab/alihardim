@@ -17,6 +17,10 @@ class Config:
     ALI_APP_SECRET = os.environ.get('ALI_APP_SECRET')
     ALI_TRACKING_ID = os.environ.get('ALI_TRACKING_ID')
     
+    # Supabase Configuration (User Authentication)
+    SUPABASE_URL = os.environ.get('SUPABASE_URL') or 'https://otymgaukfdhugnygnxbr.supabase.co'
+    SUPABASE_KEY = os.environ.get('SUPABASE_KEY') or 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90eW1nYXVrZmRodWdueWdueGJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NjA5MjQsImV4cCI6MjA5MzAzNjkyNH0.g8OPxI-9rG_GCdCyRwLt3IGcQ1HPUSK0KLipGMUUN_E'
+    
     # App Settings
     PRODUCTS_PER_PAGE = 24
     MAX_PRODUCTS_TO_SYNC = 5000
