@@ -5,7 +5,11 @@ load_dotenv()
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard-coded-secret-key'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///ali_store.db'
+    # Use /tmp for Vercel (read-only file system), local file otherwise
+    if os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV'):
+        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:////tmp/ali_store.db'
+    else:
+        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///ali_store.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # AliExpress API
