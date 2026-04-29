@@ -3,600 +3,564 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="מגן סופר - אלפי מוצרים איכותיים מאלי אקספרס לציבור החרדי. מוצרים צנועים, מחירים משתלמים, משלוח עד הבית.">
+    <meta name="keywords" content="אלי אקספרס, מוצרים לחרדים, קניות באינטרנט, מוצרים צנועים, חנות אונליין">
     <title>{% block title %}מגן סופר - מוצרים איכותיים לציבור החרדי{% endblock %}</title>
     
     <!-- Bootstrap 5 RTL -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!-- Google Fonts - Heebo for Hebrew -->
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     
     <style>
         :root {
-            --amazon-dark: #131921;
-            --amazon-light: #232f3e;
-            --amazon-orange: #febd69;
-            --amazon-orange-hover: #f3a847;
-            --amazon-blue: #007185;
-            --ali-red: #ff4747;
-            --ali-orange: #ff6a00;
-            --text-dark: #0f1111;
-            --text-light: #565959;
-            --bg-gray: #f3f3f3;
-            --border-color: #d5d9d9;
-            --success-green: #067d62;
+            /* Premium Color Palette */
+            --primary: #1a1a2e;
+            --primary-light: #16213e;
+            --accent: #e94560;
+            --accent-hover: #ff6b6b;
+            --gold: #f9a825;
+            --success: #00b894;
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.15);
+            --shadow-xl: 0 20px 60px rgba(0,0,0,0.2);
+            --gradient-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --gradient-accent: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+            --gradient-gold: linear-gradient(135deg, #f9a825 0%, #fbc02d 100%);
         }
-        
+
         * {
             font-family: 'Heebo', sans-serif;
             box-sizing: border-box;
         }
-        
+
         body {
-            background-color: #fff;
+            background: var(--bg-light);
             color: var(--text-dark);
-            line-height: 1.5;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
-        
-        /* ===== AMAZON-STYLE HEADER ===== */
-        .main-header {
-            background: var(--amazon-dark);
-            padding: 8px 0;
+
+        /* ===== HEADER - Premium Style ===== */
+        .top-bar {
+            background: var(--gradient-primary);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
         }
-        
-        .header-container {
-            max-width: 1500px;
+
+        .header-content {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        .logo {
-            color: white;
-            font-size: 1.6rem;
-            font-weight: 700;
-            text-decoration: none;
+            padding: 0 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            padding: 5px 10px;
-            border-radius: 3px;
+            justify-content: space-between;
+            gap: 30px;
         }
-        
-        .logo:hover {
-            color: white;
-            text-decoration: none;
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .logo-icon {
-            color: var(--amazon-orange);
-            font-size: 1.8rem;
-        }
-        
-        .logo-text {
+
+        .brand {
             display: flex;
-            flex-direction: column;
-            line-height: 1.2;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s ease;
         }
-        
-        .logo-main {
+
+        .brand:hover {
+            transform: scale(1.02);
+            color: white;
+        }
+
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-gold);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(249, 168, 37, 0.4);
+        }
+
+        .brand-text h1 {
             font-size: 1.4rem;
             font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.5px;
         }
-        
-        .logo-sub {
-            font-size: 0.7rem;
+
+        .brand-text span {
+            font-size: 0.75rem;
+            opacity: 0.9;
             font-weight: 400;
-            color: #ccc;
         }
-        
-        /* Search Bar - Amazon Style */
-        .search-wrapper {
-            flex: 1;
-            max-width: 800px;
-            margin: 0 20px;
-        }
-        
+
+        /* Search Bar - Premium */
         .search-container {
+            flex: 1;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .search-box {
             display: flex;
             background: white;
-            border-radius: 8px;
+            border-radius: 50px;
             overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: box-shadow 0.3s ease;
         }
-        
-        .search-dropdown {
-            background: #f3f3f3;
-            border: none;
-            border-right: 1px solid #cdcdcd;
-            padding: 12px 15px;
-            font-size: 0.9rem;
-            color: #555;
-            cursor: pointer;
-            min-width: 100px;
+
+        .search-box:focus-within {
+            box-shadow: var(--shadow-lg), 0 0 0 3px rgba(233, 69, 96, 0.2);
         }
-        
+
         .search-input {
             flex: 1;
             border: none;
-            padding: 12px 15px;
+            padding: 14px 24px;
             font-size: 1rem;
             outline: none;
+            background: transparent;
         }
-        
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
         .search-btn {
-            background: var(--amazon-orange);
+            background: var(--gradient-accent);
             border: none;
-            padding: 12px 25px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .search-btn:hover {
-            background: var(--amazon-orange-hover);
-        }
-        
-        .search-btn i {
-            font-size: 1.3rem;
-            color: #131921;
-        }
-        
-        /* Header Actions */
-        .header-actions {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .header-action {
+            padding: 0 30px;
             color: white;
-            text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 3px;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        
-        .header-action:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-        
-        .action-label {
-            font-size: 0.75rem;
-            color: #ccc;
-        }
-        
-        .action-main {
-            font-size: 0.95rem;
             font-weight: 600;
-        }
-        
-        /* ===== NAVIGATION BAR - AliExpress Style ===== */
-        .nav-bar {
-            background: var(--amazon-light);
-            padding: 0;
-        }
-        
-        .nav-container {
-            max-width: 1500px;
-            margin: 0 auto;
-            padding: 0 15px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .nav-all {
-            color: white;
-            text-decoration: none;
-            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-weight: 600;
-            transition: all 0.2s;
-            border: 1px solid transparent;
         }
-        
-        .nav-all:hover {
-            border-color: white;
-            color: white;
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+            padding: 0 35px;
         }
-        
-        .nav-all i {
-            font-size: 1.2rem;
-        }
-        
-        .nav-links {
+
+        /* Header Actions */
+        .header-actions {
             display: flex;
-            gap: 0;
+            gap: 20px;
         }
-        
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            padding: 12px 15px;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-        
-        .nav-link:hover {
-            border-color: white;
-            color: white;
-        }
-        
-        /* Product Cards */
-        .product-card {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: all 0.3s;
-            height: 100%;
+
+        .header-action {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.05);
         }
-        
-        .product-card:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+
+        .header-action:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
             transform: translateY(-2px);
         }
-        
-        .product-image {
-            height: 200px;
-            object-fit: contain;
-            padding: 15px;
-            background: white;
+
+        .header-action i {
+            font-size: 1.3rem;
         }
-        
-        .product-body {
-            padding: 15px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .product-title {
-            font-size: 0.95rem;
+
+        .header-action span {
+            font-size: 0.75rem;
             font-weight: 500;
-            color: var(--text-color);
+        }
+
+        /* ===== NAVIGATION ===== */
+        .main-nav {
+            background: white;
+            padding: 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .nav-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            color: var(--text-dark);
             text-decoration: none;
-            line-height: 1.4;
-            margin-bottom: 8px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .nav-link i {
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero-section {
+            background: var(--gradient-primary);
+            padding: 80px 0;
+            position: relative;
             overflow: hidden;
         }
-        
-        .product-title:hover {
-            color: #c7511f;
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.03" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: bottom;
         }
-        
-        .product-price {
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-title span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
             font-size: 1.3rem;
-            font-weight: 700;
-            color: #b12704;
-            margin-bottom: 5px;
-        }
-        
-        .product-original-price {
-            font-size: 0.85rem;
-            color: #888;
-            text-decoration: line-through;
-        }
-        
-        .product-discount {
-            background: #cc0c39;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-size: 0.75rem;
-            margin-right: 8px;
-        }
-        
-        .product-rating {
-            color: var(--accent-color);
-            font-size: 0.85rem;
-            margin-top: 5px;
-        }
-        
-        .buy-btn {
-            background: var(--secondary-color);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: 500;
-            margin-top: auto;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-            color: var(--text-color);
-        }
-        
-        .buy-btn:hover {
-            background: var(--accent-color);
-            color: var(--text-color);
-        }
-        
-        /* Categories Grid */
-        .category-card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s;
-            border: 1px solid var(--border-color);
-            text-decoration: none;
-            color: var(--text-color);
-        }
-        
-        .category-card:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transform: translateY(-3px);
-            color: var(--primary-color);
-        }
-        
-        .category-icon {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        
-        /* Hero Section */
-        .hero-section {
-            background: linear-gradient(135deg, #232f3e 0%, #37475a 100%);
-            color: white;
-            padding: 40px 0;
+            color: rgba(255,255,255,0.85);
+            max-width: 600px;
             margin-bottom: 30px;
         }
-        
-        .hero-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 15px;
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.2);
         }
-        
-        .hero-subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        /* Section Headers */
-        .section-header {
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--secondary-color);
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-        
-        /* Footer */
+
+        /* ===== FOOTER ===== */
         .main-footer {
-            background: var(--primary-color);
+            background: var(--gradient-primary);
             color: white;
-            padding: 40px 0 20px;
-            margin-top: 50px;
+            padding: 60px 0 30px;
+            margin-top: 80px;
         }
-        
-        .footer-link {
-            color: #ddd;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 8px;
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        
-        .footer-link:hover {
-            color: var(--secondary-color);
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
         }
-        
-        .footer-bottom {
-            border-top: 1px solid #37475a;
-            padding-top: 20px;
-            margin-top: 30px;
-            text-align: center;
-            color: #aaa;
-        }
-        
-        /* Badges */
-        .badge-new {
-            background: #00a8e1;
-            color: white;
-        }
-        
-        .badge-hot {
-            background: #ff6b6b;
-            color: white;
-        }
-        
-        .badge-sale {
-            background: #cc0c39;
-            color: white;
-        }
-        
-        /* Breadcrumb */
-        .breadcrumb-nav {
-            background: white;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border-color);
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
-        .breadcrumb {
+
+        .footer-section h4 i {
+            color: var(--gold);
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
             margin: 0;
         }
-        
-        .breadcrumb-item a {
-            color: var(--primary-color);
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        
-        .breadcrumb-item.active {
-            color: #666;
+
+        .footer-links a:hover {
+            color: var(--gold);
+            transform: translateX(-5px);
         }
-        
-        /* Sort dropdown */
-        .sort-dropdown {
-            padding: 8px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            background: white;
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
         }
-        
-        /* Pagination */
-        .pagination .page-link {
-            color: var(--primary-color);
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-        
-        .pagination .page-item.active .page-link {
-            background: var(--primary-color);
-            border-color: var(--primary-color);
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(233, 69, 96, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(233, 69, 96, 0.6); }
         }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .product-image {
-                height: 150px;
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .header-content {
+                flex-wrap: wrap;
+                gap: 15px;
             }
-            
+
+            .search-container {
+                order: 3;
+                width: 100%;
+                max-width: none;
+            }
+
             .hero-title {
-                font-size: 1.5rem;
-            }
-            
-            .category-link {
-                font-size: 0.8rem;
-                padding: 5px 8px;
+                font-size: 2.5rem;
             }
         }
+
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .brand-text h1 {
+                font-size: 1.1rem;
+            }
+
+            .header-actions {
+                gap: 10px;
+            }
+
+            .header-action span {
+                display: none;
+            }
+        }
+
+        {% block extra_css %}{% endblock %}
     </style>
-    
-    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <!-- Header -->
-    <header class="main-header">
-        <div class="header-container">
-            <div class="d-flex align-items-center justify-content-between w-100 flex-wrap flex-md-nowrap">
-                <!-- Logo -->
-                <a href="{{ url_for('main.index') }}" class="logo">
-                    <i class="bi bi-shop logo-icon"></i>
-                    <span class="logo-text">
-                        <span class="logo-main">מגן סופר</span>
-                        <span class="logo-sub">AliExpress צנוע</span>
-                    </span>
+    <header class="top-bar">
+        <div class="header-content">
+            <a href="{{ url_for('main.index') }}" class="brand animate__animated animate__fadeIn">
+                <div class="brand-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>מגן סופר</h1>
+                    <span>AliExpress צנוע ✓</span>
+                </div>
+            </a>
+
+            <div class="search-container">
+                <form action="{{ url_for('main.search') }}" method="GET" class="search-box">
+                    <input type="text" name="q" class="search-input" placeholder="חפש מוצרים צנועים..." value="{{ request.args.get('q', '') }}">
+                    <button type="submit" class="search-btn">
+                        <i class="bi bi-search"></i>
+                        <span>חפש</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="header-actions">
+                <a href="#" class="header-action">
+                    <i class="bi bi-person-circle"></i>
+                    <span>התחבר</span>
                 </a>
-                
-                <!-- Search -->
-                <div class="search-wrapper my-2 my-md-0">
-                    <form action="{{ url_for('main.search') }}" method="GET" class="search-container">
-                        <select name="category" class="search-dropdown d-none d-sm-block">
-                            <option value="">הכל</option>
-                            <option value="electronic">אלקטרוניקה</option>
-                            <option value="toys">צעצועים</option>
-                            <option value="home_garden">בית וגן</option>
-                            <option value="tools">כלי עבודה</option>
-                            <option value="jewish">יהדות</option>
-                        </select>
-                        <input type="text" name="q" class="search-input" placeholder="חפש מוצרים..." value="{{ request.args.get('q', '') }}">
-                        <button type="submit" class="search-btn">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </form>
-                </div>
-                
-                <!-- Header Actions -->
-                <div class="header-actions d-none d-lg-flex">
-                    <a href="#" class="header-action">
-                        <span class="action-label">שלום, התחבר</span>
-                        <span class="action-main">חשבון</span>
-                    </a>
-                    <a href="#" class="header-action">
-                        <span class="action-label">ההזמנות שלך</span>
-                        <span class="action-main">הזמנות</span>
-                    </a>
-                    <a href="#" class="header-action">
-                        <span class="action-main"><i class="bi bi-cart3"></i> עגלה</span>
-                    </a>
-                </div>
+                <a href="#" class="header-action">
+                    <i class="bi bi-heart-fill"></i>
+                    <span>מועדפים</span>
+                </a>
+                <a href="#" class="header-action">
+                    <i class="bi bi-cart3"></i>
+                    <span>עגלה</span>
+                </a>
             </div>
         </div>
     </header>
-    
-    <!-- Navigation Bar -->
-    <nav class="nav-bar">
-        <div class="nav-container">
-            <a href="#" class="nav-all">
-                <i class="bi bi-list"></i>
-                <span>הכל</span>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-content">
+            <a href="{{ url_for('main.category', category_key='electronic') }}" class="nav-link">
+                <i class="bi bi-lightning-charge"></i> אלקטרוניקה
             </a>
-            <div class="nav-links d-none d-md-flex">
-                <a href="{{ url_for('main.category', category_key='electronic') }}" class="nav-link">אלקטרוניקה</a>
-                <a href="{{ url_for('main.category', category_key='toys') }}" class="nav-link">צעצועים</a>
-                <a href="{{ url_for('main.category', category_key='home_garden') }}" class="nav-link">בית וגן</a>
-                <a href="{{ url_for('main.category', category_key='tools') }}" class="nav-link">כלי עבודה</a>
-                <a href="{{ url_for('main.category', category_key='jewish') }}" class="nav-link">יהדות</a>
-                <a href="{{ url_for('main.category', category_key='sports') }}" class="nav-link">ספורט</a>
-                <a href="{{ url_for('main.category', category_key='car') }}" class="nav-link">רכב</a>
-                <a href="{{ url_for('main.category', category_key='pet') }}" class="nav-link">חיות מחמד</a>
-            </div>
+            <a href="{{ url_for('main.category', category_key='toys') }}" class="nav-link">
+                <i class="bi bi-emoji-smile"></i> צעצועים
+            </a>
+            <a href="{{ url_for('main.category', category_key='home_garden') }}" class="nav-link">
+                <i class="bi bi-house-heart"></i> בית וגן
+            </a>
+            <a href="{{ url_for('main.category', category_key='tools') }}" class="nav-link">
+                <i class="bi bi-tools"></i> כלי עבודה
+            </a>
+            <a href="{{ url_for('main.category', category_key='jewish') }}" class="nav-link">
+                <i class="bi bi-star-of-david"></i> יהדות
+            </a>
+            <a href="{{ url_for('main.category', category_key='sports') }}" class="nav-link">
+                <i class="bi bi-trophy"></i> ספורט
+            </a>
+            <a href="{{ url_for('main.category', category_key='car') }}" class="nav-link">
+                <i class="bi bi-car-front"></i> רכב
+            </a>
+            <a href="{{ url_for('main.category', category_key='pet') }}" class="nav-link">
+                <i class="bi bi-heart"></i> חיות מחמד
+            </a>
+            <a href="{{ url_for('main.category', category_key='office') }}" class="nav-link">
+                <i class="bi bi-briefcase"></i> משרד
+            </a>
+            <a href="{{ url_for('main.category', category_key='art') }}" class="nav-link">
+                <i class="bi bi-palette"></i> אמנות
+            </a>
         </div>
     </nav>
-    
+
     <!-- Main Content -->
     <main>
         {% block content %}{% endblock %}
     </main>
-    
+
     <!-- Footer -->
     <footer class="main-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 mb-4">
-                    <h5>עלינו</h5>
-                    <p class="small text-light">
-                        אתר מוצרי AliExpress מותאם לציבור החרדי והדתי. כל המוצרים נבדקים לצניעות.
-                    </p>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4><i class="bi bi-grid-3x3-gap"></i> קטגוריות</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('main.category', category_key='electronic') }}"><i class="bi bi-chevron-left"></i> אלקטרוניקה</a></li>
+                        <li><a href="{{ url_for('main.category', category_key='toys') }}"><i class="bi bi-chevron-left"></i> צעצועים</a></li>
+                        <li><a href="{{ url_for('main.category', category_key='home_garden') }}"><i class="bi bi-chevron-left"></i> בית וגן</a></li>
+                        <li><a href="{{ url_for('main.category', category_key='tools') }}"><i class="bi bi-chevron-left"></i> כלי עבודה</a></li>
+                        <li><a href="{{ url_for('main.category', category_key='jewish') }}"><i class="bi bi-chevron-left"></i> יהדות</a></li>
+                    </ul>
                 </div>
-                <div class="col-md-3 mb-4">
-                    <h5>קטגוריות</h5>
-                    {% for key, name in config['SAFE_CATEGORIES'].items() %}
-                    <a href="{{ url_for('main.category', category_key=key) }}" class="footer-link">{{ name }}</a>
-                    {% endfor %}
+                <div class="footer-section">
+                    <h4><i class="bi bi-info-circle"></i> מידע</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="bi bi-chevron-left"></i> אודותינו</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-left"></i> איך קונים</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-left"></i> מדיניות פרטיות</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-left"></i> תנאי שימוש</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-left"></i> שאלות נפוצות</a></li>
+                    </ul>
                 </div>
-                <div class="col-md-3 mb-4">
-                    <h5>שירות לקוחות</h5>
-                    <a href="#" class="footer-link">שאלות נפוצות</a>
-                    <a href="#" class="footer-link">מדיניות החזרות</a>
-                    <a href="#" class="footer-link">צור קשר</a>
+                <div class="footer-section">
+                    <h4><i class="bi bi-headset"></i> תמיכה</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="bi bi-chevron-left"></i> צור קשר</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-left"></i> מעקב הזמנות</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-left"></i> החזרות</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-left"></i> משלוחים</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-left"></i> בלוג</a></li>
+                    </ul>
                 </div>
-                <div class="col-md-3 mb-4">
-                    <h5>הישאר מעודכן</h5>
-                    <p class="small text-light">הירשם לקבלת עדכונים על מבצעים חמים</p>
-                    <div class="input-group">
-                        <input type="email" class="form-control" placeholder="האימייל שלך">
-                        <button class="btn btn-warning">הירשם</button>
-                    </div>
+                <div class="footer-section">
+                    <h4><i class="bi bi-envelope"></i> עקבו אחרינו</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="bi bi-whatsapp"></i> וואטסאפ</a></li>
+                        <li><a href="#"><i class="bi bi-telegram"></i> טלגרם</a></li>
+                        <li><a href="#"><i class="bi bi-envelope-at"></i> אימייל</a></li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p class="mb-0">© 2024 AliExpress חרדי - כל הזכויות שמורות</p>
-                <p class="small mb-0 mt-2">האתר מכיל קישורים שותפים. המחירים מתעדכנים בזמן אמת.</p>
+                <p>© 2024 מגן סופר - חנות AliExpress צנועה לציבור החרדי | 28,128 מוצרים | כל הזכויות שמורות</p>
             </div>
         </div>
     </footer>
-    
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>
