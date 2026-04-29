@@ -15,5 +15,12 @@ def create_app(config_class=Config):
     
     with app.app_context():
         db.create_all()
+        
+        # Seed products if database is empty (for Vercel)
+        from app.models.database import Product
+        if Product.query.count() == 0:
+            print("Database empty - seeding products...")
+            from app.utils.seed_products import seed_products
+            seed_products()
     
     return app
