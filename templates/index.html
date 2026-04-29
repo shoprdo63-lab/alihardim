@@ -123,7 +123,7 @@
                         {% endif %}
                     </div>
                     <div class="product-actions d-flex gap-2">
-                        <a href="https://www.aliexpress.com/item/{{ product.product_id }}.html" target="_blank" class="buy-btn aliexpress-btn flex-grow-1">
+                        <a href="{{ product.product_url or product.affiliate_url }}" target="_blank" class="buy-btn aliexpress-btn flex-grow-1">
                             <i class="bi bi-box-arrow-up-right"></i> ל-AliExpress
                         </a>
                         <button class="btn btn-outline-danger btn-sm add-to-wishlist" 
@@ -166,7 +166,7 @@
                     <div class="product-price-row">
                         <span class="product-price">${{ "%.2f"|format(product.price) }}</span>
                     </div>
-                    <a href="https://www.aliexpress.com/item/{{ product.product_id }}.html" target="_blank" class="buy-btn aliexpress-btn">
+                    <a href="{{ product.product_url or product.affiliate_url }}" target="_blank" class="buy-btn aliexpress-btn">
                         <i class="bi bi-box-arrow-up-right"></i> ל-AliExpress
                     </a>
                 </div>
