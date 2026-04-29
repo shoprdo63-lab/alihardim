@@ -452,17 +452,19 @@
             </div>
 
             <div class="header-actions">
-                <a href="#" class="header-action">
+                <a href="{{ url_for('main.login') }}" class="header-action">
                     <i class="bi bi-person-circle"></i>
                     <span>התחבר</span>
                 </a>
-                <a href="#" class="header-action">
+                <a href="{{ url_for('main.wishlist') }}" class="header-action">
                     <i class="bi bi-heart-fill"></i>
                     <span>מועדפים</span>
+                    <span id="wishlist-count" class="badge bg-danger" style="position: absolute; top: -5px; right: -5px; display: none;">0</span>
                 </a>
-                <a href="#" class="header-action">
+                <a href="{{ url_for('main.cart') }}" class="header-action" style="position: relative;">
                     <i class="bi bi-cart3"></i>
                     <span>עגלה</span>
+                    <span id="cart-count" class="badge bg-danger" style="position: absolute; top: -5px; right: -5px; display: none;">0</span>
                 </a>
             </div>
         </div>
@@ -560,6 +562,73 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Cart & Wishlist Counter -->
+    <script>
+        function updateHeaderCounts() {
+            // Update cart count
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            const cartBadge = document.getElementById('cart-count');
+            if (cartBadge) {
+                if (cartCount > 0) {
+                    cartBadge.textContent = cartCount;
+                    cartBadge.style.display = 'block';
+                } else {
+                    cartBadge.style.display = 'none';
+                }
+            }
+            
+            // Update wishlist count
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const wishlistBadge = document.getElementById('wishlist-count');
+            if (wishlistBadge) {
+                if (wishlist.length > 0) {
+                    wishlistBadge.textContent = wishlist.length;
+                    wishlistBadge.style.display = 'block';
+                } else {
+                    wishlistBadge.style.display = 'none';
+                }
+            }
+        }
+        
+        // Update counts on page load
+        document.addEventListener('DOMContentLoaded', updateHeaderCounts);
+        
+        // Listen for storage changes (from other tabs)
+        window.addEventListener('storage', updateHeaderCounts);
+        
+        // Helper function to add to cart
+        function addToCart(product) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const existing = cart.find(item => item.id === product.id);
+            
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({...product, quantity: 1});
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateHeaderCounts();
+            alert('המוצר נוסף לעגלה!');
+        }
+        
+        // Helper function to add to wishlist
+        function addToWishlist(product) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const existing = wishlist.find(item => item.id === product.id);
+            
+            if (!existing) {
+                wishlist.push(product);
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                updateHeaderCounts();
+                alert('המוצר נוסף למועדפים!');
+            } else {
+                alert('המוצר כבר במועדפים!');
+            }
+        }
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>

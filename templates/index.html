@@ -122,9 +122,20 @@
                         <span class="product-original-price">${{ "%.2f"|format(product.original_price) }}</span>
                         {% endif %}
                     </div>
-                    <a href="{{ product.affiliate_url or product.product_url }}" target="_blank" class="buy-btn aliexpress-btn">
-                        <i class="bi bi-box-arrow-up-right"></i> ל-AliExpress
-                    </a>
+                    <div class="product-actions d-flex gap-2">
+                        <a href="{{ product.affiliate_url or product.product_url }}" target="_blank" class="buy-btn aliexpress-btn flex-grow-1">
+                            <i class="bi bi-box-arrow-up-right"></i> ל-AliExpress
+                        </a>
+                        <button class="btn btn-outline-danger btn-sm add-to-wishlist" 
+                                data-id="{{ product.product_id }}"
+                                data-title="{{ product.title_hebrew or product.title }}"
+                                data-price="{{ product.price }}"
+                                data-image="{{ product.image_url }}"
+                                data-url="{{ product.affiliate_url or product.product_url }}"
+                                title="הוסף למועדפים">
+                            <i class="bi bi-heart"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
             {% endfor %}
@@ -787,4 +798,23 @@
     }
 }
 </style>
+
+{% block extra_js %}
+<script>
+    // Handle Add to Wishlist buttons
+    document.querySelectorAll('.add-to-wishlist').forEach(button => {
+        button.addEventListener('click', function() {
+            const product = {
+                id: this.dataset.id,
+                title: this.dataset.title,
+                price: parseFloat(this.dataset.price),
+                image: this.dataset.image,
+                affiliateUrl: this.dataset.url
+            };
+            addToWishlist(product);
+        });
+    });
+</script>
+{% endblock %}
+
 {% endblock %}

@@ -252,6 +252,28 @@ def products_count():
     })
 
 
+@main.route('/cart')
+def cart():
+    """Shopping cart page."""
+    # Get cart from session (stored in localStorage on frontend)
+    # For now, show empty cart template
+    return render_template('cart.html')
+
+
+@main.route('/wishlist')
+def wishlist():
+    """Wishlist/Favorites page."""
+    # Get wishlist from session
+    # For now, show empty wishlist template
+    return render_template('wishlist.html')
+
+
+@main.route('/login')
+def login():
+    """Login page."""
+    return render_template('login.html')
+
+
 def get_category_icon(key):
     """Get icon name for category."""
     icons = {

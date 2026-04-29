@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}עגלת קניות | מגן סופר{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4"><i class="bi bi-cart3"></i> עגלת קניות</h1>
+    
+    <div id="cart-content">
+        <!-- Cart will be populated by JavaScript -->
+        <div class="text-center py-5" id="empty-cart">
+            <i class="bi bi-cart-x" style="font-size: 5rem; color: #ccc;"></i>
+            <h3 class="mt-3">העגלה ריקה</h3>
+            <p class="text-muted">עדיין לא הוספת מוצרים לעגלה</p>
+            <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg mt-3">
+                <i class="bi bi-shop"></i> המשך לקנות
+            </a>
+        </div>
+        
+        <div id="cart-items" style="display: none;">
+            <!-- Cart items will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<script>
+// Load cart from localStorage
+function loadCart() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const emptyCartDiv = document.getElementById('empty-cart');
+    const cartItemsDiv = document.getElementById('cart-items');
+    
+    if (cart.length === 0) {
+        emptyCartDiv.style.display = 'block';
+        cartItemsDiv.style.display = 'none';
+    } else {
+        emptyCartDiv.style.display = 'none';
+        cartItemsDiv.style.display = 'block';
+        // Render cart items
+        renderCartItems(cart);
+    }
+}
+
+function renderCartItems(cart) {
+    const container = document.getElementById('cart-items');
+    let html = '<div class="row">';
+    
+    let total = 0;
+    cart.forEach(item => {
+        total += item.price * item.quantity;
+        html += `
+            <div class="col-12 mb-3">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-md-2">
+                            <img src="${item.image}" class="img-fluid rounded-start" alt="${item.title}">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">${item.title}</h5>
+                                <p class="card-text">כמות: ${item.quantity}</p>
+                                <p class="card-text"><strong>$${(item.price * item.quantity).toFixed(2)}</strong></p>
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                            <button class="btn btn-danger" onclick="removeFromCart('${item.id}')">
+                                <i class="bi bi-trash"></i> הסר
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    html += `
+        <div class="row mt-4">
+            <div class="col-12 text-end">
+                <h3>סה"כ: $${total.toFixed(2)}</h3>
+                <a href="{{ url_for('main.index') }}" class="btn btn-outline-primary me-2">המשך לקנות</a>
+                <a href="{{ url_for('main.login') }}" class="btn btn-primary">המשך לתשלום</a>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+function removeFromCart(productId) {
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart = cart.filter(item => item.id !== productId);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    loadCart();
+}
+
+// Load cart on page load
+document.addEventListener('DOMContentLoaded', loadCart);
+</script>
+{% endblock %}

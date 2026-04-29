@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}מועדפים | מגן סופר{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4"><i class="bi bi-heart-fill text-danger"></i> מוצרים מועדפים</h1>
+    
+    <div id="wishlist-content">
+        <!-- Wishlist will be populated by JavaScript -->
+        <div class="text-center py-5" id="empty-wishlist">
+            <i class="bi bi-heart" style="font-size: 5rem; color: #ccc;"></i>
+            <h3 class="mt-3">אין מוצרים מועדפים</h3>
+            <p class="text-muted">לחץ על <i class="bi bi-heart"></i> במוצרים שאתה אוהב כדי לשמור אותם כאן</p>
+            <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg mt-3">
+                <i class="bi bi-shop"></i> גלה מוצרים
+            </a>
+        </div>
+        
+        <div id="wishlist-items" style="display: none;">
+            <div class="row" id="wishlist-grid">
+                <!-- Wishlist items will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Load wishlist from localStorage
+function loadWishlist() {
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    const emptyDiv = document.getElementById('empty-wishlist');
+    const itemsDiv = document.getElementById('wishlist-items');
+    const gridDiv = document.getElementById('wishlist-grid');
+    
+    if (wishlist.length === 0) {
+        emptyDiv.style.display = 'block';
+        itemsDiv.style.display = 'none';
+    } else {
+        emptyDiv.style.display = 'none';
+        itemsDiv.style.display = 'block';
+        renderWishlistItems(wishlist, gridDiv);
+    }
+}
+
+function renderWishlistItems(wishlist, container) {
+    let html = '';
+    wishlist.forEach(item => {
+        html += `
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="${item.image}" class="card-img-top" alt="${item.title}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">${item.title}</h5>
+                        <p class="card-text"><strong>$${item.price.toFixed(2)}</strong></p>
+                        <div class="d-grid gap-2">
+                            <a href="${item.affiliateUrl}" target="_blank" class="btn btn-primary">
+                                <i class="bi bi-box-arrow-up-right"></i> ל-AliExpress
+                            </a>
+                            <button class="btn btn-outline-danger" onclick="removeFromWishlist('${item.id}')">
+                                <i class="bi bi-trash"></i> הסר
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+function removeFromWishlist(productId) {
+    let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    wishlist = wishlist.filter(item => item.id !== productId);
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    loadWishlist();
+}
+
+// Load wishlist on page load
+document.addEventListener('DOMContentLoaded', loadWishlist);
+</script>
+{% endblock %}
