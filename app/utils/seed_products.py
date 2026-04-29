@@ -152,89 +152,94 @@ def generate_product_id():
 
 
 def seed_products():
-    """Seed products into database"""
-    print("Starting to seed products...")
+    """Seed the database with REAL AliExpress products with REAL images."""
+    from app.api.aliexpress import aliexpress_api
     
-    added_count = 0
-    target_count = 10000  # Will create 10,000 products
-    variations_per_product = target_count // len(BASE_PRODUCTS)  # ~100 variations each
+    print("🌱 Importing REAL AliExpress products with REAL images...")
     
-    for base_idx, (title_he, title_en, category, price_range) in enumerate(BASE_PRODUCTS):
-        # Create multiple variations of each product
-        for var in range(variations_per_product):
+    with current_app.app_context():
+        # Import keywords that give good results
+        keywords = ['smartphone', 'headphones', 'smart watch', 'laptop', 'tablet', 
+                    'charger', 'case', 'cable', 'speaker', 'camera']
+        
+        added_count = Product.query.count()
+        if added_count > 1000:
+            print(f"✅ Already have {added_count:,} real products, skipping.")
+            return 0
+        
+        print(f"Importing real products from AliExpress API...")
+        
+        for keyword in keywords[:5]:  # Get 5 categories to start
             try:
-                if var == 0:
-                    full_title_he = title_he
-                    full_title_en = title_en
-                else:
-                    full_title_he = f"{title_he} דגם {var}"
-                    full_title_en = f"{title_en} model {var}"
+                print(f"\n🔍 Searching: {keyword}")
                 
-                product_id = generate_product_id()
+                result = aliexpress_api._make_request('GET', {
+                    'method': 'aliexpress.affiliate.product.query',
+                    'keywords': keyword,
+                    'page_no': 1,
+                    'page_size': 50,
+                    'target_currency': 'USD',
+                    'target_language': 'EN',
+                    'tracking_id': aliexpress_api.tracking_id,
+                    'fields': 'product_id,product_title,product_main_image,sale_price,target_sale_price,product_detail_url,evaluate_rate,shop_title',
+                })
                 
-                # Generate price
-                base_price = random.uniform(price_range[0], price_range[1])
-                discount = random.choice([0, 10, 15, 20, 25])
+                if not result or 'resp_result' not in result:
+                    continue
                 
-                if discount > 0:
-                    original_price = round(base_price / (1 - discount/100), 2)
-                    sale_price = round(base_price, 2)
-                else:
-                    original_price = None
-                    sale_price = round(base_price, 2)
+                data = result['resp_result'].get('result', {})
+                products_data = data.get('products', {}).get('product', [])
                 
-                # Create AliExpress search URL (using English search term for better results)
-                search_term_en = urllib.parse.quote(full_title_en.replace(' ', '-'))
-                search_term_he = urllib.parse.quote(full_title_he)
+                print(f"   Found {len(products_data)} products")
                 
-                # Primary affiliate link - search URL
-                affiliate_url = f"https://www.aliexpress.com/w/wholesale-{search_term_en}.html?sortType=bestmatch"
-                
-                # Fallback direct search URL
-                product_url = f"https://www.aliexpress.com/wholesale?SearchText={search_term_he}"
-                
-                # Create styled image (use English for image - Hebrew doesn't render well)
-                bg, text = CATEGORY_COLORS.get(category, ('1a1a2e', 'e94560'))
-                short_title_en = full_title_en[:20].replace(' ', '+')
-                image_url = f"https://placehold.co/400x400/{bg}/{text}?text={short_title_en}"
-                
-                # Create product
-                product = Product(
-                    product_id=product_id,
-                    title=full_title_en,
-                    title_hebrew=full_title_he,
-                    description_hebrew=f"{full_title_he} - מוצר איכותי מאלי אקספרס. מחיר משתלם ואיכות גבוהה. משלוח ישיר עד הבית.",
-                    price=sale_price,
-                    original_price=original_price,
-                    currency='USD',
-                    category=category,
-                    image_url=image_url,
-                    product_url=product_url,
-                    affiliate_url=affiliate_url,
-                    rating=round(random.uniform(4.0, 5.0), 1),
-                    reviews_count=random.randint(10, 2000),
-                    orders_count=random.randint(50, 10000),
-                    store_name=random.choice(['AliExpress Official', 'Top Brand Store', 'Quality Seller', 'Best Value Shop']),
-                    is_modest=True
-                )
-                
-                db.session.add(product)
-                added_count += 1
-                
-                # Commit every 1000 products
-                if added_count % 1000 == 0:
-                    db.session.commit()
-                    print(f"  Added {added_count:,} products...")
+                for product in products_data:
+                    pid = product.get('product_id', '')
                     
+                    # Skip if exists
+                    if Product.query.filter_by(product_id=pid).first():
+                        continue
+                    
+                    # Parse price
+                    price_str = product.get('target_sale_price', product.get('sale_price', '0'))
+                    try:
+                        price = float(str(price_str).replace('$', '').replace(',', ''))
+                    except:
+                        price = 0.0
+                    
+                    # Get REAL image URL
+                    image_url = product.get('product_main_image', '')
+                    
+                    new_product = Product(
+                        product_id=pid,
+                        title=product.get('product_title', ''),
+                        title_hebrew=product.get('product_title', ''),
+                        description_hebrew='מוצר איכותי מאלי אקספרס. משלוח חינם.',
+                        price=price,
+                        original_price=price * 1.2 if price > 0 else 0,
+                        currency='USD',
+                        category='electronic',
+                        image_url=image_url,  # REAL IMAGE!
+                        product_url=product.get('product_detail_url', ''),
+                        affiliate_url=product.get('product_detail_url', ''),
+                        rating=float(str(product.get('evaluate_rate', '4.5')).split()[0]) if product.get('evaluate_rate') else 4.5,
+                        reviews_count=0,
+                        orders_count=0,
+                        store_name=product.get('shop_title', 'AliExpress'),
+                        is_modest=True
+                    )
+                    
+                    db.session.add(new_product)
+                    added_count += 1
+                
+                db.session.commit()
+                print(f"   ✅ Added products (Total: {added_count})")
+                
             except Exception as e:
-                print(f"Error adding product: {e}")
-                db.session.rollback()
+                print(f"   ❌ Error: {e}")
                 continue
-    
-    # Final commit
-    db.session.commit()
-    print(f"✅ Successfully added {added_count:,} products!")
-    return added_count
+        
+        print(f"\n🎉 Successfully imported {added_count} REAL products with REAL images!")
+        return added_count
 
 
 if __name__ == '__main__':
