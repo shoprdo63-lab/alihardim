@@ -187,10 +187,10 @@ def seed_products():
                 search_term = urllib.parse.quote(full_title_he)
                 affiliate_url = f"https://www.aliexpress.com/w/wholesale-{search_term}.html?sortType=bestmatch"
                 
-                # Create styled image
+                # Create styled image (use English for image - Hebrew doesn't render well)
                 bg, text = CATEGORY_COLORS.get(category, ('1a1a2e', 'e94560'))
-                short_title = urllib.parse.quote(full_title_he[:15])
-                image_url = f"https://placehold.co/400x400/{bg}/{text}?text={short_title}"
+                short_title_en = full_title_en[:20].replace(' ', '+')
+                image_url = f"https://placehold.co/400x400/{bg}/{text}?text={short_title_en}"
                 
                 # Create product
                 product = Product(
