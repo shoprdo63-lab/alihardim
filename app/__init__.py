@@ -21,6 +21,12 @@ def create_app(config_class=Config):
     from app.routes import main
     app.register_blueprint(main)
     
+    # Add context processor for current_user
+    @app.context_processor
+    def inject_user():
+        from flask_login import current_user
+        return dict(current_user=current_user)
+    
     with app.app_context():
         db.create_all()
         
