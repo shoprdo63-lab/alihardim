@@ -13,6 +13,8 @@
     }
   ],
   "env": {
-    "FLASK_ENV": "production"
+    "FLASK_ENV": "production",
+    "VERCEL": "1",
+    "VERCEL_ENV": "production"
   }
 }
