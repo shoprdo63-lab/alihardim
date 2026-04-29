@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ category_name }} | AliExpress חרדי{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="breadcrumb-nav">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">דף הבית</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ category_name }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Category Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="mb-2">{{ category_name }}</h1>
+            <p class="text-muted mb-0">{{ total }} מוצרים נמצאו</p>
+        </div>
+        
+        <!-- Sort Dropdown -->
+        <form method="GET" class="d-flex align-items-center">
+            <label class="me-2 text-muted">מיין לפי:</label>
+            <select name="sort" class="sort-dropdown" onchange="this.form.submit()">
+                <option value="popular" {% if sort == 'popular' %}selected{% endif %}>הכי פופולרי</option>
+                <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>מחיר - מהנמוך לגבוה</option>
+                <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>מחיר - מהגבוה לנמוך</option>
+                <option value="newest" {% if sort == 'newest' %}selected{% endif %}>החדשים ביותר</option>
+            </select>
+        </form>
+    </div>
+
+    <!-- Products Grid -->
+    {% if products.items %}
+    <div class="row g-3">
+        {% for product in products.items %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="product-card">
+                {% if product.original_price and product.original_price > product.price %}
+                <span class="badge badge-sale position-absolute top-0 end-0 m-2">
+                    {{ ((product.original_price - product.price) / product.original_price * 100)|round|int }}% הנחה
+                </span>
+                {% endif %}
+                <img src="{{ product.image_url }}" alt="{{ product.title_hebrew or product.title }}" class="product-image w-100">
+                <div class="product-body">
+                    <a href="{{ url_for('main.product_detail', product_id=product.product_id) }}" class="product-title">
+                        {{ product.title_hebrew or product.title }}
+                    </a>
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="product-price">${{ "%.2f"|format(product.price) }}</span>
+                        {% if product.original_price and product.original_price > product.price %}
+                        <span class="product-original-price">${{ "%.2f"|format(product.original_price) }}</span>
+                        {% endif %}
+                    </div>
+                    {% if product.rating %}
+                    <div class="product-rating mb-2">
+                        <i class="bi bi-star-fill"></i> {{ product.rating }}
+                        {% if product.reviews_count %}({{ product.reviews_count }} ביקורות){% endif %}
+                    </div>
+                    {% endif %}
+                    {% if product.store_name %}
+                    <small class="text-muted d-block mb-2">
+                        <i class="bi bi-shop"></i> {{ product.store_name }}
+                    </small>
+                    {% endif %}
+                    <a href="{{ product.affiliate_url or product.product_url }}" target="_blank" class="buy-btn aliexpress-btn">
+                        <i class="bi bi-box-arrow-up-right"></i> ל-AliExpress
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if products.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main.category', category_key=category_key, page=products.prev_num, sort=sort) }}">
+                    <i class="bi bi-chevron-right"></i> הקודם
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for page_num in products.iter_pages(left_edge=2, left_current=2, right_current=2, right_edge=2) %}
+                {% if page_num %}
+                    {% if page_num == products.page %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_num }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('main.category', category_key=category_key, page=page_num, sort=sort) }}">{{ page_num }}</a>
+                    </li>
+                    {% endif %}
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if products.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main.category', category_key=category_key, page=products.next_num, sort=sort) }}">
+                    הבא <i class="bi bi-chevron-left"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+        <h3 class="mt-3">לא נמצאו מוצרים</h3>
+        <p class="text-muted">אנחנו עובדים על הוספת מוצרים לקטגוריה זו</p>
+        <a href="{{ url_for('main.index') }}" class="btn btn-primary">חזור לדף הבית</a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.aliexpress-btn {
+    background: linear-gradient(135deg, #ff6a00 0%, #ff8e53 100%);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 0.9rem;
+}
+
+.aliexpress-btn:hover {
+    background: linear-gradient(135deg, #e55a00 0%, #e57d43 100%);
+    color: white;
+}
+</style>
+{% endblock %}

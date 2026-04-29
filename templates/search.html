@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if query %}תוצאות חיפוש עבור "{{ query }}" | {% endif %}AliExpress חרדי{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="breadcrumb-nav">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">דף הבית</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    {% if query %}חיפוש: {{ query }}{% else %}חיפוש{% endif %}
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Search Header -->
+    <div class="mb-4">
+        <h1 class="mb-3">
+            {% if query %}
+            תוצאות חיפוש עבור "{{ query }}"
+            {% else %}
+            חפש מוצרים
+            {% endif %}
+        </h1>
+        
+        <!-- Search Form -->
+        <form action="{{ url_for('main.search') }}" method="GET" class="row g-2">
+            <div class="col-md-8">
+                <input type="text" name="q" class="form-control form-control-lg" 
+                       placeholder="הקלד שם מוצר, קטגוריה או מילת מפתח..."
+                       value="{{ query }}">
+            </div>
+            <div class="col-md-2">
+                <select name="category" class="form-select form-select-lg">
+                    <option value="">כל הקטגוריות</option>
+                    {% for key, name in config['SAFE_CATEGORIES'].items() %}
+                    <option value="{{ key }}" {% if category == key %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-warning btn-lg w-100">
+                    <i class="bi bi-search"></i> חפש
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if products %}
+    <!-- Results Count -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <p class="text-muted mb-0">נמצאו {{ total }} תוצאות</p>
+        
+        {% if products.pages > 1 %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm mb-0">
+                {% if products.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('main.search', q=query, category=category, page=products.prev_num) }}">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for page_num in products.iter_pages(left_edge=1, left_current=1, right_current=1, right_edge=1) %}
+                    {% if page_num %}
+                        {% if page_num == products.page %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.search', q=query, category=category, page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if products.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('main.search', q=query, category=category, page=products.next_num) }}">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+
+    <!-- Products Grid -->
+    {% if products.items %}
+    <div class="row g-3">
+        {% for product in products.items %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="product-card">
+                {% if product.original_price and product.original_price > product.price %}
+                <span class="badge badge-sale position-absolute top-0 end-0 m-2">
+                    {{ ((product.original_price - product.price) / product.original_price * 100)|round|int }}% הנחה
+                </span>
+                {% endif %}
+                <img src="{{ product.image_url }}" alt="{{ product.title_hebrew or product.title }}" class="product-image w-100">
+                <div class="product-body">
+                    <a href="{{ url_for('main.product_detail', product_id=product.product_id) }}" class="product-title">
+                        {{ product.title_hebrew or product.title }}
+                    </a>
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="product-price">${{ "%.2f"|format(product.price) }}</span>
+                        {% if product.original_price and product.original_price > product.price %}
+                        <span class="product-original-price">${{ "%.2f"|format(product.original_price) }}</span>
+                        {% endif %}
+                    </div>
+                    {% if product.rating %}
+                    <div class="product-rating mb-2">
+                        <i class="bi bi-star-fill"></i> {{ product.rating }}
+                    </div>
+                    {% endif %}
+                    {% if product.store_name %}
+                    <small class="text-muted d-block mb-2">
+                        <i class="bi bi-shop"></i> {{ product.store_name }}
+                    </small>
+                    {% endif %}
+                    <a href="{{ product.affiliate_url or product.product_url }}" target="_blank" class="buy-btn aliexpress-btn">
+                        <i class="bi bi-box-arrow-up-right"></i> ל-AliExpress
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if products.pages > 1 %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if products.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main.search', q=query, category=category, page=products.prev_num) }}">
+                    <i class="bi bi-chevron-right"></i> הקודם
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for page_num in products.iter_pages(left_edge=2, left_current=2, right_current=2, right_edge=2) %}
+                {% if page_num %}
+                    {% if page_num == products.page %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_num }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('main.search', q=query, category=category, page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                    {% endif %}
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if products.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main.search', q=query, category=category, page=products.next_num) }}">
+                    הבא <i class="bi bi-chevron-left"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-search" style="font-size: 4rem; color: #ccc;"></i>
+        <h3 class="mt-3">לא נמצאו תוצאות</h3>
+        <p class="text-muted">נסה לחפש עם מילים אחרות או בדוק בקטגוריות</p>
+        <div class="mt-4">
+            <a href="{{ url_for('main.index') }}" class="btn btn-primary me-2">חזור לדף הבית</a>
+            <a href="{{ url_for('main.category', category_key='electronic') }}" class="btn btn-outline-primary">גאדג'טים</a>
+        </div>
+    </div>
+    {% endif %}
+
+    {% elif message %}
+    <!-- Empty Search State -->
+    <div class="text-center py-5">
+        <i class="bi bi-search-heart" style="font-size: 4rem; color: var(--secondary-color);"></i>
+        <h3 class="mt-3">חפש מוצרים איכותיים</h3>
+        <p class="text-muted">הקלד מילת חיפוש למעלה כדי למצוא מוצרים נהדרים</p>
+        
+        <!-- Popular Searches -->
+        <div class="mt-4">
+            <p class="text-muted mb-3">חיפושים פופולריים:</p>
+            <div class="d-flex justify-content-center flex-wrap gap-2">
+                <a href="{{ url_for('main.search', q='לגו') }}" class="btn btn-outline-secondary btn-sm">לגו</a>
+                <a href="{{ url_for('main.search', q='אוזניות') }}" class="btn btn-outline-secondary btn-sm">אוזניות</a>
+                <a href="{{ url_for('main.search', q='כלי עבודה') }}" class="btn btn-outline-secondary btn-sm">כלי עבודה</a>
+                <a href="{{ url_for('main.search', q='לטיולים') }}" class="btn btn-outline-secondary btn-sm">לטיולים</a>
+                <a href="{{ url_for('main.search', q='מטבח') }}" class="btn btn-outline-secondary btn-sm">מטבח</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.aliexpress-btn {
+    background: linear-gradient(135deg, #ff6a00 0%, #ff8e53 100%);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 0.9rem;
+}
+
+.aliexpress-btn:hover {
+    background: linear-gradient(135deg, #e55a00 0%, #e57d43 100%);
+    color: white;
+}
+</style>
+{% endblock %}

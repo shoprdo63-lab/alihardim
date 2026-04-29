@@ -1,0 +1,555 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.title_hebrew or product.title }} | מגן סופר{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div style="background: white; border-bottom: 1px solid #ddd; padding: 15px 0;">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}" style="color: var(--amazon-blue);">דף הבית</a></li>
+                <li class="breadcrumb-item">
+                    <a href="{{ url_for('main.category', category_key=product.category) }}" style="color: var(--amazon-blue);">
+                        {{ config['SAFE_CATEGORIES'].get(product.category, product.category) }}
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">{{ (product.title_hebrew or product.title)[:40] }}{% if (product.title_hebrew or product.title)|length > 40 %}...{% endif %}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row">
+        <!-- Product Images -->
+        <div class="col-lg-5 mb-4">
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="{{ product.image_url }}" alt="{{ product.title_hebrew or product.title }}" id="mainImage">
+                </div>
+                <div class="image-thumbs">
+                    <div class="thumb active">
+                        <img src="{{ product.image_url }}" alt="תמונה 1">
+                    </div>
+                    <div class="thumb">
+                        <img src="{{ product.image_url }}" alt="תמונה 2">
+                    </div>
+                    <div class="thumb">
+                        <img src="{{ product.image_url }}" alt="תמונה 3">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="col-lg-4 mb-4">
+            <div class="product-details">
+                <h1 class="product-title">{{ product.title_hebrew or product.title }}</h1>
+                
+                <!-- Store Info -->
+                <div class="store-info">
+                    <span>נמכר על ידי:</span>
+                    <a href="#" class="store-name">{{ product.store_name or 'AliExpress Official' }}</a>
+                    <span class="badge bg-success ms-2">צנוע</span>
+                </div>
+                
+                <!-- Rating -->
+                {% if product.rating %}
+                <div class="rating-section">
+                    <div class="stars-large">
+                        {% for i in range(5) %}
+                            {% if i < product.rating|int %}
+                                <i class="bi bi-star-fill"></i>
+                            {% else %}
+                                <i class="bi bi-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <a href="#" class="rating-link">{{ product.rating }} ({{ product.reviews_count }} ביקורות)</a>
+                    <span class="orders-count">{{ product.orders_count }} הזמנות</span>
+                </div>
+                {% endif %}
+                
+                <!-- Price -->
+                <div class="price-section">
+                    {% if product.original_price and product.original_price > product.price %}
+                    <div class="discount-badge">-{{ "%.0f"|format(((product.original_price - product.price) / product.original_price) * 100) }}%</div>
+                    <div class="original-price">${{ "%.2f"|format(product.original_price) }}</div>
+                    {% endif %}
+                    <div class="current-price">${{ "%.2f"|format(product.price) }}</div>
+                    <div class="tax-note">כולל מיסים ומשלוח</div>
+                </div>
+                
+                <!-- Features -->
+                <div class="product-features">
+                    <div class="feature-item">
+                        <i class="bi bi-shield-check"></i>
+                        <span>מוצר צנוע ומאושר</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-truck"></i>
+                        <span>משלוח חינם זמין</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-arrow-return-left"></i>
+                        <span>החזרה בתוך 30 יום</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-shield-fill-check"></i>
+                        <span>אחריות יצרן</span>
+                    </div>
+                </div>
+                
+                <!-- Description -->
+                {% if product.description_hebrew %}
+                <div class="product-description">
+                    <h4>תיאור המוצר</h4>
+                    <p>{{ product.description_hebrew }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Buy Box -->
+        <div class="col-lg-3 mb-4">
+            <div class="buy-box">
+                {% if product.original_price and product.original_price > product.price %}
+                <div class="price-save">חיסכון: ${{ "%.2f"|format(product.original_price - product.price) }}</div>
+                {% endif %}
+                <div class="buy-price">${{ "%.2f"|format(product.price) }}</div>
+                <div class="delivery-info">
+                    <i class="bi bi-truck"></i>
+                    <span>משלוח חינם עד הבית</span>
+                </div>
+                <div class="stock-info">
+                    <i class="bi bi-check-circle-fill" style="color: var(--success-green);"></i>
+                    <span>במלאי - זמין להזמנה</span>
+                </div>
+                <a href="{{ product.affiliate_url or product.product_url }}" target="_blank" class="buy-button aliexpress-buy-btn">
+                    <i class="bi bi-box-arrow-up-right"></i> צפה במוצר ב-AliExpress
+                </a>
+                <div class="affiliate-note">
+                    <i class="bi bi-info-circle"></i>
+                    <span>קישור שותף - תמיכה באתר ללא עלות נוספת</span>
+                </div>
+                <div class="secure-badge">
+                    <i class="bi bi-lock-fill"></i>
+                    <span>עסקה מאובטחת</span>
+                </div>
+                <div class="ships-from">נשלח על ידי: AliExpress</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="section-title mb-4">מוצרים דומים</h3>
+            <div class="products-grid">
+                {% for rel in related_products %}
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <img src="{{ rel.image_url }}" alt="{{ rel.title_hebrew or rel.title }}" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <a href="{{ url_for('main.product_detail', product_id=rel.product_id) }}" class="product-title">
+                            {{ rel.title_hebrew or rel.title }}
+                        </a>
+                        <div class="product-price-row">
+                            <span class="product-price">${{ "%.2f"|format(rel.price) }}</span>
+                        </div>
+                        <a href="{{ rel.affiliate_url or rel.product_url }}" target="_blank" class="buy-btn aliexpress-small-btn">
+                            <i class="bi bi-box-arrow-up-right"></i> ל-AliExpress
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.product-gallery {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.main-image {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.main-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.image-thumbs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.thumb {
+    width: 60px;
+    height: 60px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.thumb.active, .thumb:hover {
+    border-color: var(--amazon-orange);
+}
+
+.thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.product-details {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.product-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.store-info {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.store-name {
+    color: var(--amazon-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.rating-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.stars-large {
+    color: #ffa41c;
+    font-size: 1.2rem;
+}
+
+.rating-link {
+    color: var(--amazon-blue);
+    text-decoration: none;
+}
+
+.orders-count {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.price-section {
+    margin-bottom: 20px;
+}
+
+.discount-badge {
+    display: inline-block;
+    background: var(--ali-red);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.original-price {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    text-decoration: line-through;
+    margin-bottom: 5px;
+}
+
+.current-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.tax-note {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 5px;
+}
+
+.product-features {
+    margin-bottom: 20px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.feature-item i {
+    color: var(--success-green);
+    font-size: 1.2rem;
+}
+
+.product-description {
+    margin-top: 20px;
+}
+
+.product-description h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.buy-box {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.price-save {
+    color: var(--ali-red);
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.buy-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.delivery-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.delivery-info i {
+    color: var(--success-green);
+}
+
+.stock-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: var(--success-green);
+}
+
+.buy-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    background: var(--amazon-orange);
+    color: #131921;
+    border: none;
+    padding: 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+}
+
+.buy-button:hover {
+    background: var(--amazon-orange-hover);
+    color: #131921;
+}
+
+.aliexpress-buy-btn {
+    background: linear-gradient(135deg, #ff6a00 0%, #ff8e53 100%);
+    color: white;
+    font-size: 1rem;
+}
+
+.aliexpress-buy-btn:hover {
+    background: linear-gradient(135deg, #e55a00 0%, #e57d43 100%);
+    color: white;
+}
+
+.affiliate-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 10px;
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.buy-now-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background: var(--ali-orange);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 15px;
+    transition: all 0.2s;
+}
+
+.buy-now-button:hover {
+    background: #e55a00;
+    color: white;
+}
+
+.secure-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-bottom: 10px;
+}
+
+.ships-from {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.product-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.product-image-wrapper {
+    padding: 15px;
+    background: #f9f9f9;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.product-info {
+    padding: 12px;
+}
+
+.product-title {
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.5em;
+}
+
+.product-title:hover {
+    color: var(--amazon-orange-hover);
+}
+
+.product-price-row {
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.buy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    background: var(--amazon-orange);
+    color: #131921;
+    border: none;
+    padding: 8px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.buy-btn:hover {
+    background: var(--amazon-orange-hover);
+    color: #131921;
+}
+
+.aliexpress-small-btn {
+    background: linear-gradient(135deg, #ff6a00 0%, #ff8e53 100%);
+    color: white;
+    font-size: 0.8rem;
+}
+
+.aliexpress-small-btn:hover {
+    background: linear-gradient(135deg, #e55a00 0%, #e57d43 100%);
+    color: white;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+</style>
+{% endblock %}
